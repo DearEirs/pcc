@@ -24,18 +24,15 @@ async def test(request):
     uid = request.args.get('uid')
     oid = request.args.get('oid')
 
-    if not all((action, uid)):
+    if not all((action, oid)):
         result = {
-            "error_code": "101",
-            "error_message": "未能提供正确的参数, 请检查参数后重新发起请求"
+            "error_code": "501",
+            "error_message": "Incorrect parameter!"
         }
         return response.json(result)
 
     action = func_dict[action]
-    if oid:
-        result = await action(uid, oid)
-    else:
-        result = await action(uid)
+    result = await action(oid)
     return response.json(result)
 
 

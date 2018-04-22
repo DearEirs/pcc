@@ -1,5 +1,7 @@
 import asyncio
 from aiomysql import create_pool
+import aiomysql
+
 
 host = '192.168.1.130'
 port = 3306
@@ -8,8 +10,25 @@ password = 'root'
 db = 'pcc'
 loop = asyncio.get_event_loop()
 
-async def list():
-    pass
+
+
+
+async def list(uid, oid, cursor=0, page_size=10, is_friend=None):
+    next_cursor = cursor + page_size
+    select_social = "select user.uid, user.username from friend, favour \
+        where favour.uid=friend.friend_id and favour.oid={oid}"
+    select_others = "select user.uid, user.username from user, \
+        favour where favour.oid={oid} limit {cursor}, {next_cursor}"
+
+    friends = await db.mysql.excute(select_social)
+    like_list = list(friends)
+
+    if not is_friend:
+        select_others.format(oid=oid, cursor=cursor, next_cursor=next_cursor)
+        others = await db.mysql.excute(select_others)
+        like_list = like_list.extend(others)
+
+    return {"oid": oid, "like_list": like_list, "next_cursor": next_cursor}
 
 
 async def like(uid, oid):
@@ -46,20 +65,33 @@ async def like(uid, oid):
 
 
 
+async def count(oid):
+    async with create_pool(host=host, port=port,
+                           user=user, password=password,
+                           db=db) as pool:
+        async with pool.get() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("select oid, count(uid) from favour where oid=%s group by oid;", oid)
+                value = await cur.fetchone()
+                return {"oid": value[0],
+                        "count": value[1]
+                        }
 
 
-
-
-
-
-
-
-async def count():
-    pass
-
-
-async def is_like():
-    pass
+async def is_like(uid, oid):
+    async with create_pool(host=host, port=port,
+                           user=user, password=password,
+                           db=db) as pool:
+        async with pool.get() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute('''SELECT uid, oid
+                                  FROM  favour
+                                  WHERE uid=%s AND oid=%s;''',(uid, oid))
+                res = await cur.fetchone()
+                if res:
+                    return {'status':'yes'}
+                else:
+                    return {'status':'no'}
 
 
 async def error():

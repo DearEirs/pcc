@@ -3,6 +3,10 @@
 
 from sanic import Sanic
 from sanic import response
+<<<<<<< HEAD
+=======
+
+>>>>>>> center/develop
 import view
 
 
@@ -22,6 +26,10 @@ async def test(request):
     action = request.args.get('action')
     uid = request.args.get('uid')
     oid = request.args.get('oid')
+<<<<<<< HEAD
+=======
+
+>>>>>>> center/develop
     if not all((action, uid)):
         result = {
             "error_code": "101",
@@ -38,4 +46,8 @@ async def test(request):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     app.run(host="0.0.0.0", port=8000)
+=======
+    app.run(host="0.0.0.0", port=8000)
+>>>>>>> center/develop

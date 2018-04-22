@@ -1,6 +1,7 @@
 import asyncio
 from aiomysql import create_pool
 import aiomysql
+import db
 
 
 host = '192.168.1.130'
@@ -9,8 +10,6 @@ user = 'root'
 password = 'root'
 db = 'pcc'
 loop = asyncio.get_event_loop()
-
-
 
 
 async def list(uid, oid, cursor=0, page_size=10, is_friend=None):
@@ -32,7 +31,6 @@ async def list(uid, oid, cursor=0, page_size=10, is_friend=None):
 
 
 async def like(uid, oid):
-
     async with create_pool(host=host, port=port,
                            user=user, password=password,
                            db=db) as pool:
@@ -62,7 +60,6 @@ async def like(uid, oid):
                 else:   # 第二次 like 返回错误码
                     print('error')
                     error()
-
 
 
 async def count(oid):

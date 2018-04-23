@@ -2,7 +2,7 @@ import asyncio
 from aiomysql import create_pool
 import aiomysql
 import db
-
+from log import Log
 
 host = '192.168.1.130'
 port = 3306
@@ -54,12 +54,13 @@ async def like(uid, oid):
                         await cur.execute("select uname from user where uid = {}".format(each_uid))
                         uname = await cur.fetchone()
                         like_list.append({each_uid: uname[0]})
-
                     return {'oid': oid, 'uid': uid, 'like_list': like_list}
 
                 else:   # 第二次 like 返回错误码
-                    print('error')
-                    error()
+                    content = 'object already been liked.'
+                    Log().recordLog(content)
+                    result = await error(oid, uid, content)
+                    return result
 
 
 async def count(oid):
@@ -91,5 +92,9 @@ async def is_like(uid, oid):
                     return {'status':'no'}
 
 
-async def error():
-    pass
+async def error(oid, uid, content):
+    return {"error_code": 501,
+        "error_message": content,
+        "oid": oid,
+        "uid": uid
+        }

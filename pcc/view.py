@@ -74,9 +74,9 @@ async def count(oid):
 
 
 async def is_like(uid, oid):
-    async with aiomysql.create_pool(host='139.199.0.245', port=3306,
-                           user='dear', password='both-win',
-                           db='pcc') as pool:
+    async with aiomysql.create_pool(host=host, port=port,
+                           user=user, password=password,
+                           db=db) as pool:
         async with pool.get() as conn:
             async with conn.cursor() as cur:
                 await res = cur.execute('''SELECT uid, oid

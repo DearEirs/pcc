@@ -4,14 +4,14 @@
 from sanic import Sanic
 from sanic import response
 
-import view
+import actions
 
 
 func_dict = {
-    'list': view.list,
-    'like': view.like,
-    'count': view.count,
-    'is_like': view.is_like
+    'list': actions.list,
+    'like': actions.like,
+    'count': actions.count,
+    'is_like': actions.is_like
 }
 
 
@@ -19,7 +19,8 @@ app = Sanic()
 
 
 @app.route("/pcc", methods=['GET'])
-async def test(request):
+async def dispatch(request):
+    '''根据提交的参数分发请求'''
     action = request.args.get('action')
     uid = request.args.get('uid')
     oid = request.args.get('oid')

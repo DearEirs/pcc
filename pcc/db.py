@@ -1,5 +1,8 @@
 import aiomysql
-from settings import MYSQL_CONFIG as m
+import settings
+
+
+config = settings.MYSQL_CONFIG
 
 
 class Mysql:
@@ -9,11 +12,11 @@ class Mysql:
         return cls._instance
 
     def __init__(self,
-                 host=m['host'],
-                 user=m['user'],
-                 password=m['password'],
-                 port=m['port'],
-                 db=m['db']):
+                 host=config['host'],
+                 user=config['user'],
+                 password=config['password'],
+                 port=config['port'],
+                 db=config['db']):
         self.host = host
         self.user = user
         self.password = password
@@ -28,9 +31,12 @@ class Mysql:
                                                db=self.db)
         return self.pool
 
-    async def execute(self, sql):
+    async def get_conn(self):
         if not hasattr(self, "pool"):
             await self.create_pool()
+        return await self.pool.get()
+
+    async def execute(self, sql):
         async with self.pool.get() as conn:
             async with conn.cursor() as cur:
                 result = await cur.execute(sql)

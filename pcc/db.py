@@ -34,10 +34,4 @@ class Mysql:
     async def get_conn(self):
         if not hasattr(self, "pool"):
             await self.create_pool()
-        return await self.pool.get()
-
-    async def execute(self, sql):
-        async with self.pool.get() as conn:
-            async with conn.cursor() as cur:
-                result = await cur.execute(sql)
-                return result
+        return self.pool.get()

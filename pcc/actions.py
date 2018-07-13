@@ -10,17 +10,17 @@ async def list(uid, oid, cursor=0, page_size=10, is_friend=0):
     cursor = 0 if not cursor else cursor
     page_size = 10 if not page_size else page_size
     is_friend = 0 if not is_friend else is_friend
-    next_cursor = cursor + page_size
+    next_cursor = int(cursor) + int(page_size)
     result = {'oid': oid, 'next_cursor': next_cursor}
 
     if is_friend:
         sql = ('select uid, name from user where '
-               'uid in (select fid from friend where uid={0}) and '
-               'uid in (select uid from favour where oid={1}) limit {2},{3}'.format(uid, oid, cursor, next_cursor))
+               'uid in (select uid from favour where oid={0} and '
+               'uid in (select fid from friend where uid={1})) '
+               'limit {2},{3}'.format(oid, uid, cursor, next_cursor))
     else:
         sql = 'select uid, name from user where uid in (select uid from favour) limit {0},{1}'.format(cursor, next_cursor)
 
-    print(sql)
     connection = await database.get_conn()
     async with connection as conn:
         async with conn.cursor() as cur:

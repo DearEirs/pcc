@@ -44,7 +44,7 @@ async def dispatch(request):
         oid = request.args.get('oid')
         action = func_dict[action]
         result = await action(uid, oid)
-    elif asction == 'count':
+    elif action == 'count':
         oid = request.args.get('oid')
         action = func_dict[action]
         result = await action(oid)

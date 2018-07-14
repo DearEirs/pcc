@@ -2,7 +2,7 @@ import asyncio
 from aiomysql import create_pool
 import csv
 
-host = '127.0.0.1'
+host = '192.168.1.103'
 port = 3306
 user = 'root'
 password = 'root'
@@ -68,16 +68,16 @@ def insert():
     friends_list = []
     like_list = []
 
-    # user_file = csv.reader(open(r'C:\Users\Asus\Desktop\py\py3\architecture\test\user.csv'))
+    # user_file = csv.reader(open(r'/root/PycharmProjects/py3/demo/pcc/test.csv/user.csv'))
     # for i, j in user_file:
     #     user_list.append("INSERT INTO user VALUES ('{}', '{}')".format(i, j))
-    #
-    #
-    # friends_file = csv.reader(open(r'C:\Users\Asus\Desktop\py\py3\architecture\test\friends.csv'))
+
+
+    # friends_file = csv.reader(open(r'/root/PycharmProjects/py3/demo/pcc/test.csv/friends.csv'))
     # for i, j in friends_file:
     #     friends_list.append("INSERT INTO friend VALUES ('{}', '{}')".format(i, j))
 
-    like_file = csv.reader(open(r'C:\Users\Asus\Desktop\py\py3\architecture\test\like.csv'))
+    like_file = csv.reader(open(r'/root/PycharmProjects/py3/demo/pcc/test.csv/like.csv'))
     for i, *j in like_file:
         for _ in list(set(j)):
             like_list.append("INSERT INTO favour VALUES ('{}', '{}')".format(i, _))
@@ -98,6 +98,6 @@ def insert():
             loop.run_until_complete(asyncio.gather(*tasks))      # 将这些协程注册到事件循环中。
 
 
-#delTable()
-#createTable()
-insert()
+# delTable()
+createTable()
+# insert()

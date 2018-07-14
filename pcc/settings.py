@@ -1,7 +1,7 @@
 MYSQL_CONFIG = {
-    'host': '139.199.0.245',
-    'user': 'dear',
-    'password': 'both-win',
+    'host': '192.168.1.103',
+    'username': 'root',
+    'password': 'root',
     'port': 3306,
     'db': 'pcc'
 }

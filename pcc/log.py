@@ -1,6 +1,6 @@
 # 既要把日志输出到控制台， 还要写入日志文件
 import logging
-import asyncio
+
 class Log:
     def __init__(self):
         # 创建一个logger
